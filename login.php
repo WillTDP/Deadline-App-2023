@@ -14,9 +14,9 @@ if (!empty($_POST)) {
     $password = $_POST['password'];
 
     if (canLogin($username, $password)) {
+        session_start();
         $_SESSION['username'] = $username;
         header('Location: index.php');
-        exit(); // Terminate the script after redirection
     } else {
         $error = 'Wrong username or password';
     }
