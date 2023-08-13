@@ -2,7 +2,13 @@
 session_start();
 
 function canLogin($username, $password) {
-    if ($username == 'admin' && $password == 'admin') {
+    $conn = new PDO('mysql:host=localhost;dbname=deadline_app_2023', 'root', 'root');
+    $query = $conn->prepare('SELECT * FROM users WHERE email = :email');
+    $query->bindValue(':email', $username);
+    $query->execute();
+    $user = $query->fetch();
+    $hash = $user['password'];
+    if (password_verify($password, $hash)) {
         return true;
     } else {
         return false;
