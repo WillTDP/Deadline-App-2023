@@ -1,7 +1,7 @@
 <?php
 class ToDo{
     private $name;
-    private $task;
+    private $description;
     private $deadline;
     
     /**
@@ -23,19 +23,19 @@ class ToDo{
     }
 
     /**
-     * Get the value of task
+     * Get the value of description
      */
-    public function getTask()
+    public function getdescription()
     {
-        return $this->task;
+        return $this->description;
     }
 
     /**
      * Set the value of task
      */
-    public function setTask($task): self
+    public function setDescription($description): self
     {
-        $this->task = $task;
+        $this->description = $description;
 
         return $this;
     }
@@ -56,5 +56,29 @@ class ToDo{
         $this->deadline = $deadline;
 
         return $this;
+    }
+
+    public function save()
+    {
+        //db connection
+        $conn = new PDO('mysql:host=localhost;dbname=deadline_app_2023', 'root', 'root');
+
+        //insert query into db
+        $query = $conn->prepare('INSERT INTO todo (name, description, deadline) VALUES (:name, :description, :deadline)');
+        
+        //bind values to query
+        $name = $this->getName();
+        $query->bindValue(':name', $name);
+
+        $task = $this->getDescription();
+        $query->bindValue(':description', $task);
+
+        $deadline = $this->getDeadline();
+        $query->bindValue(':deadline', $deadline);
+        
+        $result = $query->execute();
+
+        //return true or false
+        return $result;
     }
 }

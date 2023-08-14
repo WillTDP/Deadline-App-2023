@@ -1,5 +1,19 @@
 <?php
 session_start();
+include_once 'Classes/ToDo.php';
+
+if (!empty($_POST)) {
+    try {
+        // Form was submitted
+        $todo = new ToDo();
+        $todo->setName($_POST['name']);
+        $todo->setDescription($_POST['description']);
+        $todo->setDeadline($_POST['deadline']);
+        $todo->save();
+    } catch (\Throwable $th) {
+        $error = $th->getMessage();
+    }
+}
 if (isset($_SESSION['username'])) {
     // User is logged in
     echo 'Welcome, ' . $_SESSION['username'];
@@ -22,8 +36,8 @@ if (isset($_SESSION['username'])) {
             <input type="text" name="name" id="name">
         </div>
         <div>
-            <label for="task">Task Description</label>
-            <input type="text" name="task" id="task">
+            <label for="description">Task Description</label>
+            <input type="text" name="description" id="description">
         </div>
         <!--deadline date with calender selector-->
         <div>
@@ -33,8 +47,13 @@ if (isset($_SESSION['username'])) {
         <div>
             <input type="submit" value="Add Task">
         </div>
-
     </form>
+    <?php if (isset($error)): ?>
+        <div class="alert"><?php echo $error; ?></div>
+    <?php endif; ?>
+    <?php if (isset($success)): ?>
+        <div class="success"><?php echo $success; ?></div>
+    <?php endif; ?>
     <a href="logout.php">Log Out</a>
 </body>
 </html>
