@@ -4,3 +4,5 @@
 [0711/192016.743:ERROR:crash_report_database_win.cc(428)] unexpected header
 [0802/184525.700:ERROR:settings.cc(325)] Settings version is not 1
 [0802/184525.702:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0813/174913.748:ERROR:settings.cc(325)] Settings version is not 1
+[0813/174913.751:ERROR:crash_report_database_win.cc(428)] unexpected header
