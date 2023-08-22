@@ -22,6 +22,7 @@ if (isset($_SESSION['username'])) {
     echo 'You are not logged in';
 }
 
+$todo = ToDo::getTasks();
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,30 +31,52 @@ if (isset($_SESSION['username'])) {
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="post">
-        <div>
-            <label for="name">ToDo Name</label>
-            <input type="text" name="name" id="name">
-        </div>
-        <div>
-            <label for="description">Task Description</label>
-            <input type="text" name="description" id="description">
-        </div>
-        <!--deadline date with calender selector-->
-        <div>
-            <label for="deadline">Deadline</label>
-            <input type="date" name="deadline" id="deadline">
-        </div>
-        <div>
-            <input type="submit" value="Add Task">
-        </div>
-    </form>
-    <?php if (isset($error)): ?>
-        <div class="alert"><?php echo $error; ?></div>
-    <?php endif; ?>
-    <?php if (isset($success)): ?>
-        <div class="success"><?php echo $success; ?></div>
-    <?php endif; ?>
-    <a href="logout.php">Log Out</a>
+    <div>
+        <form action="" method="post">
+            <div>
+                <label for="name">ToDo Name</label>
+                <input type="text" name="name" id="name">
+            </div>
+            <div>
+                <label for="description">Task Description</label>
+                <input type="text" name="description" id="description">
+            </div>
+            <!--deadline date with calender selector-->
+            <div>
+                <label for="deadline">Deadline</label>
+                <input type="date" name="deadline" id="deadline">
+            </div>
+            <div>
+                <input type="submit" value="Add Task">
+            </div>
+        </form>
+        <?php if (isset($error)): ?>
+            <div class="alert"><?php echo $error; ?></div>
+        <?php endif; ?>
+        <?php if (isset($success)): ?>
+            <div class="success"><?php echo $success; ?></div>
+        <?php endif; ?>
+        <a href="logout.php">Log Out</a>
+    </div>
+    <div>
+        <h2>Tasks</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Deadline</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($todo as $task): ?>
+                    <tr>
+                        <td><?php echo $task['name']; ?></td>
+                        <td><?php echo $task['description']; ?></td>
+                        <td><?php echo $task['deadline']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 </body>
 </html>

@@ -81,4 +81,24 @@ class ToDo{
         //return true or false
         return $result;
     }
+
+    public static function getTasks()
+    {
+        //db connection
+        $conn = new PDO('mysql:host=localhost;dbname=deadline_app_2023', 'root', 'root');
+
+        //insert query into db
+        $query = $conn->prepare('SELECT * FROM todo');
+        
+        //bind values to query
+        $query->execute();
+
+        //return array of tasks
+        $todos = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        //return todos
+        return $todos;
+
+    }
+
 }
