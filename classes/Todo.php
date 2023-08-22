@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . "/Db.php");
 class ToDo{
     private $name;
     private $description;
@@ -61,7 +62,7 @@ class ToDo{
     public function save()
     {
         //db connection
-        $conn = new PDO('mysql:host=localhost;dbname=deadline_app_2023', 'root', 'root');
+        $conn = Db::connect();
 
         //insert query into db
         $query = $conn->prepare('INSERT INTO todo (name, description, deadline) VALUES (:name, :description, :deadline)');
@@ -85,8 +86,7 @@ class ToDo{
     public static function getTasks()
     {
         //db connection
-        $conn = new PDO('mysql:host=localhost;dbname=deadline_app_2023', 'root', 'root');
-
+        $conn = Db::connect();
         //insert query into db
         $query = $conn->prepare('SELECT * FROM todo');
         

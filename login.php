@@ -1,8 +1,9 @@
 <?php
 session_start();
+include_once 'Classes/Db.php';
 
 function canLogin($username, $password) {
-    $conn = new PDO('mysql:host=localhost;dbname=deadline_app_2023', 'root', 'root');
+    $conn = Db::connect();
     $query = $conn->prepare('SELECT * FROM users WHERE email = :email');
     $query->bindValue(':email', $username);
     $query->execute();

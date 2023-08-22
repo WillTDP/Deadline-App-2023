@@ -1,9 +1,11 @@
 <?php
+    include_once(__DIR__ . "/classes/Db.php");
+
     if(!empty($_POST)){
         $email = $_POST['username'];
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-        $conn = new PDO('mysql:host=localhost;dbname=deadline_app_2023', 'root', 'root');
+        $conn = Db::connect();
         $query = $conn->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
         $query->bindValue(':email', $email);
         $query->bindValue(':password', $password);

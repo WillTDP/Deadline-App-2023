@@ -9,3 +9,5 @@
 [0814/164729.331:ERROR:settings.cc(325)] Settings version is not 1
 [0814/164729.332:ERROR:crash_report_database_win.cc(428)] unexpected header
 [0814/171448.440:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0822/200438.471:ERROR:settings.cc(325)] Settings version is not 1
+[0822/200438.476:ERROR:crash_report_database_win.cc(428)] unexpected header
