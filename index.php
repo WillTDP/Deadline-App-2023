@@ -57,18 +57,11 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
                 <input type="text" name="list_name" id="list_name">
             </div>
             <div>
-                <label for="list_id">Select List</label>
-                <select name="list_id" id="list_id">
-                    <option value="">No List</option>
-                    <?php foreach ($lists as $list): ?>
-                        <option value="<?php echo $list['id']; ?>"><?php echo htmlspecialchars($list['name']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
                 <input type="submit" value="Add List">
             </div>
         </div>
+        </form>
+        <form action="" method="post">
         <div>
             <div>
                 <label for="name">ToDo Name</label>
@@ -82,6 +75,15 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
             <div>
                 <label for="deadline">Deadline</label>
                 <input type="date" name="deadline" id="deadline">
+            </div>
+            <div>
+                <label for="list_id">Select List</label>
+                <select name="list_id" id="list_id">
+                    <option value="">No List</option>
+                    <?php foreach ($lists as $list): ?>
+                        <option value="<?php echo $list['id']; ?>"><?php echo htmlspecialchars($list['name']); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div>
                 <input type="submit" value="Add Task">
