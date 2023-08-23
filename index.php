@@ -3,17 +3,27 @@ session_start();
 include_once 'Classes/ToDo.php';
 
 if (!empty($_POST)) {
-    try {
-        // Form was submitted
-        $todo = new ToDo();
-        $todo->setName($_POST['name']);
-        $todo->setDescription($_POST['description']);
-        $todo->setDeadline($_POST['deadline']);
-        $todo->save();
-    } catch (\Throwable $th) {
-        $error = $th->getMessage();
+    if (isset($_POST['list_name'])) {
+        Lists::createList($_POST['list_name']);
+    } else {
+        try {
+            // Form was submitted
+            $todo = new ToDo();
+            $todo->setName($_POST['name']);
+            $todo->setDescription($_POST['description']);
+            $todo->setDeadline($_POST['deadline']);
+
+            $newTodoId = $todo->save(); // Get the ID of the newly inserted todo item
+
+            if (!empty($_POST['list_id'])) {
+                Lists::assignToDoToList($newTodoId, $_POST['list_id']); // Use the retrieved ID
+            }
+        } catch (\Throwable $th) {
+            $error = $th->getMessage();
+        }
     }
 }
+
 if (isset($_SESSION['username'])) {
     // User is logged in
     echo 'Welcome, ' . $_SESSION['username'];
@@ -22,8 +32,11 @@ if (isset($_SESSION['username'])) {
     echo 'You are not logged in';
 }
 
-$todo = ToDo::getTasks();
+$allTasks = ToDo::getTasks(); // Fetch all tasks
 $removed = ToDo::removeTaskById(1);
+$lists = Lists::getAllLists(); // Implement this method to retrieve all lists
+$selectedListId = $_GET['list_id'] ?? null; // Get the selected list ID from the loop in the HTML below
+$todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos for the selected list
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +47,19 @@ $removed = ToDo::removeTaskById(1);
 <body>
     <div>
         <form action="" method="post">
+        <div>
+            <label for="list_name">Create New List</label>
+            <input type="text" name="list_name" id="list_name">
+        </div>
+        <div>
+            <label for="list_id">Select List</label>
+            <select name="list_id" id="list_id">
+                <option value="">No List</option>
+                <?php foreach ($lists as $list): ?>
+                    <option value="<?php echo $list['id']; ?>"><?php echo $list['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
             <div>
                 <label for="name">ToDo Name</label>
                 <input type="text" name="name" id="name">
@@ -59,26 +85,18 @@ $removed = ToDo::removeTaskById(1);
         <?php endif; ?>
         <a href="logout.php">Log Out</a>
     </div>
-    <div>
-        <h2>Tasks</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Deadline</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($todo as $task): ?>
-                    <tr>
-                        <td><?php echo $task['name']; ?></td>
-                        <td><?php echo $task['description']; ?></td>
-                        <td><?php echo $task['deadline']; ?></td>
-                    </tr>                    
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>    
+<!-- Display lists and associated todos -->
+<div>
+    <?php foreach ($lists as $list): ?>
+        <h3>List item <?php echo $list['name']; ?></h3>
+        <ul>
+            <?php $todosForList = Lists::getTodosForList($list['id']); ?>
+            <?php foreach ($todosForList as $task): ?>
+                <li><?php echo $task['name']; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endforeach; ?>
+</div>
+  
 </body>
 </html>

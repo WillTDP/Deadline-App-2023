@@ -78,9 +78,13 @@ class ToDo{
         $query->bindValue(':deadline', $deadline);
         
         $result = $query->execute();
-
-        //return true or false
-        return $result;
+        
+        // Return the ID of the newly inserted todo item
+        if ($result) {
+            return $conn->lastInsertId();
+        } else {
+            return false;
+        }
     }
 
     //get all tasks from db
@@ -144,4 +148,36 @@ class ToDo{
 
     }
 
+}
+class Lists {    
+    public static function createList($name) {
+        $conn = Db::connect();
+        $query = $conn->prepare('INSERT INTO lists (name) VALUES (:name)');
+        $query->bindValue(':name', $name);
+        return $query->execute();
+    }
+
+    public static function assignToDoToList($todoId, $listId) {
+        $conn = Db::connect();
+        $query = $conn->prepare('UPDATE todo SET list_id = :list_id WHERE id = :todo_id');
+        $query->bindValue(':list_id', $listId, PDO::PARAM_INT);
+        $query->bindValue(':todo_id', $todoId, PDO::PARAM_INT);
+        return $query->execute();
+    }
+
+    public static function getTodosForList($listId) {
+        $conn = Db::connect();
+        $query = $conn->prepare('SELECT * FROM todo WHERE list_id = :list_id');
+        $query->bindValue(':list_id', $listId, PDO::PARAM_INT); // Make sure to use proper data type
+        $query->execute();
+        $todos = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $todos;
+    }
+    public static function getAllLists() {
+        $conn = Db::connect();
+        $query = $conn->prepare('SELECT * FROM lists');
+        $query->execute();
+        $lists = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $lists;
+    }
 }
