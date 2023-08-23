@@ -83,6 +83,7 @@ class ToDo{
         return $result;
     }
 
+    //get all tasks from db
     public static function getTasks()
     {
         //db connection
@@ -98,6 +99,48 @@ class ToDo{
 
         //return todos
         return $todos;
+
+    }
+
+    //get task by id
+    public static function getTaskById($id)
+    {
+        //db connection
+        $conn = Db::connect();
+        //insert query into db
+        $query = $conn->prepare('SELECT * FROM todo WHERE id = :id');
+        
+        //bind values to query
+        $query->bindValue(':id', $id);
+
+        $query->execute();
+
+        //return array of tasks
+        $todo = $query->fetch(PDO::FETCH_ASSOC);
+
+        //return todos
+        return $todo;
+
+    }
+
+    //remove task by id
+    public static function removeTaskById($id)
+    {
+        //db connection
+        $conn = Db::connect();
+        //insert query into db
+        $query = $conn->prepare('DELETE FROM todo WHERE id = :id');
+        
+        //bind values to query
+        $query->bindValue(':id', $id);
+
+        $query->execute();
+
+        //return array of tasks
+        $todo = $query->fetch(PDO::FETCH_ASSOC);
+
+        //return todos
+        return $todo;
 
     }
 

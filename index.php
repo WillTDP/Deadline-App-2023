@@ -23,6 +23,7 @@ if (isset($_SESSION['username'])) {
 }
 
 $todo = ToDo::getTasks();
+$removed = ToDo::removeTaskById(1);
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,9 +75,10 @@ $todo = ToDo::getTasks();
                         <td><?php echo $task['name']; ?></td>
                         <td><?php echo $task['description']; ?></td>
                         <td><?php echo $task['deadline']; ?></td>
-                    </tr>
+                    </tr>                    
                 <?php endforeach; ?>
             </tbody>
         </table>
+    </div>    
 </body>
 </html>
