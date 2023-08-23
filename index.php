@@ -61,7 +61,7 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
                 <select name="list_id" id="list_id">
                     <option value="">No List</option>
                     <?php foreach ($lists as $list): ?>
-                        <option value="<?php echo $list['id']; ?>"><?php echo $list['name']; ?></option>
+                        <option value="<?php echo $list['id']; ?>"><?php echo htmlspecialchars($list['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -99,7 +99,7 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
 <!-- Display lists and associated todos -->
 <div>
     <?php foreach ($lists as $list): ?>
-        <h3>List item <?php echo $list['name']; ?></h3>
+        <h3>List: <?php echo htmlspecialchars($list['name']); ?></h3>
         <table>
             <tr>
                 <th>Name</th>
@@ -110,9 +110,9 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
             <?php $todosForList = Lists::getTodosForList($list['id']); ?>
             <?php foreach ($todosForList as $task): ?>
                 <tr>
-                    <td><?php echo $task['name']; ?></td>
-                    <td><?php echo $task['description']; ?></td>
-                    <td><?php echo $task['deadline']; ?></td>
+                    <td><?php echo htmlspecialchars($task['name']); ?></td>
+                    <td><?php echo htmlspecialchars($task['description']); ?></td>
+                    <td><?php echo htmlspecialchars($task['deadline']); ?></td>
                     <td>
                         <form action="" method="post">
                             <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
