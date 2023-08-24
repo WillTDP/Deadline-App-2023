@@ -1,4 +1,6 @@
 <?php
+include_once(__DIR__ . "/../classes/Db.php");
+
 class Comment {
     private $text;
     private $todo_id;

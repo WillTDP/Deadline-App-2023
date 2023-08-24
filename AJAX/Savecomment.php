@@ -1,5 +1,4 @@
 <?php
-include_once(__DIR__ . "/../classes/Db.php");
 include_once(__DIR__ . "/../classes/Comments.php");
 $response = [
     'status' => 'error',
