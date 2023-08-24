@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once 'Classes/ToDo.php';
+include_once 'Classes/Lists.php';
 
 if (!empty($_POST)) {
     if (isset($_POST['list_name'])) {
