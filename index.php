@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once 'Classes/ToDo.php';
-include_once 'Classes/Lists.php';
+include_once 'Classes/List.php';
 
 if (!empty($_POST)) {
     if (isset($_POST['list_name'])) {
@@ -38,10 +38,11 @@ if (isset($_POST['delete_task'])) {
     // You can do further processing or display a message here
 }
 
-$allTasks = ToDo::getTasks(); // Fetch all tasks
+//$allTasks = ToDo::getTasks(); // Fetch all tasks
 $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
-$selectedListId = $_GET['list_id'] ?? null; // Get the selected list ID from the loop in the HTML below
-$todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos for the selected list
+//$selectedListId = $_GET['list_id'] ?? null; // Get the selected list ID from the loop in the HTML below
+//$todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos for the selected list
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -110,33 +111,35 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
                 <th>Deadline</th>
                 <th>Remove</th>
             </tr>
-            <?php $todosForList = Lists::getTodosForList($list['id']); ?>
-            <?php foreach ($todosForList as $task): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($task['name']); ?></td>
-                    <td><?php echo htmlspecialchars($task['description']); ?></td>
-                    <td><?php echo htmlspecialchars($task['deadline']); ?></td>
-                    <td>
-                        <form action="" method="post">
-                            <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                            <button type="submit" name="delete_task">X</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form class="comment-form">
-                            <input type="text" name="comment" class="commentText" placeholder="Add a comment">
-                            <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button>
-                        </form>
-                    </td>
-                </tr>
-                <tr class="comments-row" data-task-id="<?php echo $task['id']; ?>">
-                    <td colspan="5">
-                        <ul class="comments-list">
-                            <!-- Comments will be added dynamically here -->
-                        </ul>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+            <?php $todosForList = Lists::getTodosForList($list['id'], 'ascending', 'deadline'); ?>
+            <div id="ToDos">
+                <?php foreach ($todosForList as $task): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($task['name']); ?></td>
+                        <td><?php echo htmlspecialchars($task['description']); ?></td>
+                        <td><?php echo htmlspecialchars($task['deadline']); ?></td>
+                        <td>
+                            <form action="" method="post">
+                                <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                <button type="submit" name="delete_task">X</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form class="comment-form">
+                                <input type="text" name="comment" class="commentText" placeholder="Add a comment">
+                                <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="comments-row" data-task-id="<?php echo $task['id']; ?>">
+                        <td colspan="5">
+                            <ul class="comments-list">
+                                <!-- Comments will be added dynamically here -->
+                            </ul>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </div>
         </table>
     <?php endforeach; ?>
 </div>

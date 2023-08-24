@@ -138,6 +138,7 @@ class ToDo{
         //bind values to query
         $query->bindValue(':id', $id);
 
+        //execute query
         $query->execute();
 
         //return array of tasks
@@ -149,3 +150,4 @@ class ToDo{
     }
 
 }
+

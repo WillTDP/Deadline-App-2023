@@ -31,24 +31,36 @@ class Lists {
         return $query->execute();
     }
 
-    //get all todos for a list by list id 
-    public static function getTodosForList($listId) {
-        //db connection
+    // get all todos for a list by list id 
+    public static function getTodosForList($listId, $sortOrder = 'ascending', $sortBy = 'deadline') {
+        // db connection
         $conn = Db::connect();
 
-        //select query from db
+        // select query from db
         $query = $conn->prepare('SELECT * FROM todo WHERE list_id = :list_id');
 
-        //bind list_id to $listId
+        // bind list_id to $listId
         $query->bindValue(':list_id', $listId, PDO::PARAM_INT); // Make sure to use proper data type
 
-        //execute query
+        // execute query
         $query->execute();
 
-        //return array of todos
+        // return array of todos
         $todos = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        // Sort todos by due date
+        if ($sortBy === 'deadline') {
+            usort($todos, function($a, $b) use ($sortOrder) {
+                return ($sortOrder === 'ascending')
+                    ? strtotime($a['deadline']) - strtotime($b['deadline'])
+                    : strtotime($b['deadline']) - strtotime($a['deadline']);
+            });
+        }
+
         return $todos;
     }
+
+    
     public static function getAllLists() {
         //db connection
         $conn = Db::connect();
