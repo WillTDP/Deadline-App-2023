@@ -1,5 +1,9 @@
 <?php
 include_once(__DIR__ . "/../classes/Comments.php");
+$response = [
+    'status' => 'error',
+    'message' => 'An error occurred'
+];
 
 if (!empty($_POST)) {
     if (isset($_POST['text'])) {
@@ -12,8 +16,7 @@ if (!empty($_POST)) {
             'message' => 'Comment saved'
         ];
     }
-
+}
     header('Content-Type: application/json');
     echo json_encode($response);
-}
 ?>

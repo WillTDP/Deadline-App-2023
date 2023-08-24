@@ -1,5 +1,6 @@
 document.querySelectorAll(".btnAddComment").forEach(button => {
     button.addEventListener("click", function() {
+    event.preventDefault(); // Prevent the default form submission
     //todo_id
     let todo_id = this.dataset.todoId;
     let text = this.closest(".comment-form").querySelector(".commentText").value;
@@ -10,7 +11,7 @@ document.querySelectorAll(".btnAddComment").forEach(button => {
     //post to db with AJAX
     async function upload(formData) {
         try {
-          const response = await fetch("/AJAX/Savecomment.php", {
+          const response = await fetch("AJAX/Savecomment.php", {
             method: "POST",
             body: formData,
           });
