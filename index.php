@@ -121,11 +121,25 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
                             <button type="submit" name="delete_task">X</button>
                         </form>
                     </td>
+                    <td>
+                        <form class="comment-form">
+                            <input type="text" name="comment" class="commentText" placeholder="Add a comment">
+                            <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr class="comments-row" data-task-id="<?php echo $task['id']; ?>">
+                    <td colspan="4">
+                        <ul class="comments-list">
+                            <!-- Comments will be added dynamically here -->
+                        </ul>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>
     <?php endforeach; ?>
 </div>
   
+<script src="App.js"></script>
 </body>
 </html>
