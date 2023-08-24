@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . "/../classes/Db.php");
 include_once(__DIR__ . "/../classes/Comments.php");
 $response = [
     'status' => 'error',
@@ -6,15 +7,17 @@ $response = [
 ];
 
 if (!empty($_POST)) {
-    if (isset($_POST['text'])) {
+    try {
         $comment = new Comment();
-        $comment->setText($_POST['text']); // Use 'text' key
-        $comment->setTodoId($_POST['todo_id']); // Use 'todo_id' key
+        $comment->setText($_POST['text']);
+        $comment->setTodoId($_POST['todo_id']);
         $comment->save();
         $response = [
             'status' => 'success',
             'message' => 'Comment saved'
         ];
+    } catch (\Throwable $th) {
+        $response['message'] = $th->getMessage();
     }
 }
     header('Content-Type: application/json');
