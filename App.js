@@ -10,28 +10,13 @@ document.querySelectorAll(".btnAddComment").forEach(button => {
     //post to db with AJAX
     async function upload(formData) {
         try {
-          const response = await fetch("AJAX/Savecomment.php", {
+          const response = await fetch("/AJAX/Savecomment.php", {
             method: "POST",
             body: formData,
           });
+          console.log(response);
           const result = await response.json();
           console.log("Success:", result);
-          //insert comment in DOM
-            let comment = document.createElement("div");
-            comment.classList.add("comment");
-            comment.innerHTML = `
-            <div class="comment__text">
-                <p>${text}</p>
-            </div>
-            <div class="comment__info">
-                <p class="comment__date">Just now</p>
-                <p class="comment__author">By: ${result.author}</p>
-            </div>
-            `;
-            document.querySelector(`.comments[data-todo-id="${todo_id}"]`).prepend(comment);
-            //clear input
-            document.querySelector(`.comment-form[data-todo-id="${todo_id}"]`).querySelector(".commentText").value = "";
-
         } catch (error) {
           console.error("Error:", error);
         }
