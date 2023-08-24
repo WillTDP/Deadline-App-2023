@@ -129,7 +129,7 @@ $todosForSelectedList = Lists::getTodosForList($selectedListId); // Fetch todos 
                     </td>
                 </tr>
                 <tr class="comments-row" data-task-id="<?php echo $task['id']; ?>">
-                    <td colspan="4">
+                    <td colspan="5">
                         <ul class="comments-list">
                             <!-- Comments will be added dynamically here -->
                         </ul>

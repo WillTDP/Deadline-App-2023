@@ -1,5 +1,5 @@
 <?php
-include_once(__DIR__ . "/../classes/Db.php");
+include_once(__DIR__ . "/Db.php");
 
 class Comment {
     private $text;
@@ -52,6 +52,15 @@ class Comment {
         $stmt->bindValue(':todo_id', $todo_id);
 
         $result = $stmt->execute();
+        return $result;
+    }
+
+    public static function getCommentsForTask($task_id){
+        $conn = Db::connect();
+        $stmt = $conn->prepare('SELECT * FROM comments WHERE todo_id = :task_id');
+        $stmt->bindValue(':task_id', $task_id);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
 }

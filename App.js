@@ -1,3 +1,14 @@
+//load comments when the page is loaded
+document.addEventListener("DOMContentLoaded", async function() {
+    const commentForms = document.querySelectorAll(".comment-form");
+
+    commentForms.forEach(form => {
+        const todo_id = form.querySelector(".btnAddComment").dataset.todoId;
+        loadComments(todo_id);
+    });
+});
+
+// Add event listener to the comment form submit button
 document.querySelectorAll(".btnAddComment").forEach(button => {
     button.addEventListener("click", function() {
     event.preventDefault(); // Prevent the default form submission
@@ -33,3 +44,24 @@ document.querySelectorAll(".btnAddComment").forEach(button => {
 
     });
 });
+
+// Function to load comments for a specific task
+async function loadComments(taskId) {
+    const commentsRow = document.querySelector(`.comments-row[data-task-id="${taskId}"]`);
+    const commentsList = commentsRow.querySelector(".comments-list");
+
+    try {
+        const response = await fetch(`AJAX/GetComments.php?task_id=${taskId}`);
+        const comments = await response.json();
+
+        commentsList.innerHTML = ""; // Clear existing comments
+
+        comments.forEach(comment => {
+            const li = document.createElement("li");
+            li.textContent = comment.text;
+            commentsList.appendChild(li);
+        });
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
