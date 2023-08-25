@@ -84,23 +84,40 @@ document.querySelectorAll(".done-form").forEach(form => {
         const checkbox = event.target;
         const todo_id = checkbox.dataset.todoId;
 
-        // Create a FormData object to send data via POST
-        const formData = new FormData();
-        formData.append("todo_id", todo_id);
+        if (!checkbox.checked) {
+            // Send an AJAX request to remove the task from the database
+            const formData = new FormData();
+            formData.append("todo_id", todo_id);
+            
+            try {
+                const response = await fetch("AJAX/MarkTaskRemove.php", {
+                    method: "POST",
+                    body: formData
+                });
+                const result = await response.json();
+                console.log("Success:", result);
 
-        try {
-            const response = await fetch("AJAX/MarkTask.php", {
-                method: "POST",
-                body: formData
-            });
-            const result = await response.json();
-            console.log("Success:", result);
+                // Handle UI update if needed
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        } else {
+            // Task is being marked as done, execute your existing code
+            const formData = new FormData();
+            formData.append("todo_id", todo_id);
+            
+            try {
+                const response = await fetch("AJAX/MarkTask.php", {
+                    method: "POST",
+                    body: formData
+                });
+                const result = await response.json();
+                console.log("Success:", result);
 
-            // You can update the UI here based on the result
-            // For example, you can change the style of the task to indicate it's done
-        } catch (error) {
-            console.error("Error:", error);
-            console.log("Response Text:", await response.text());
+                // Handle UI update if needed
+            } catch (error) {
+                console.error("Error:", error);
+            }
         }
     });
 });

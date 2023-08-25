@@ -64,4 +64,28 @@ class Done {
         $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT);
         $updateResult = $stmt->execute();
     }
+
+    //remove todo from done table
+    public function removeTodo(){
+        $conn = Db::connect();
+        $stmt = $conn->prepare('DELETE FROM done WHERE todo_id = :todo_id');
+
+        $todo_id = $this->getTodoId();
+    
+        $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT); // Use the local variable $todo_id
+    
+        $result = $stmt->execute();
+        return $result;
+    }
+
+    //remove done todo from todo table
+    public function removeDoneTodo(){
+        $conn = Db::connect();
+        $stmt = $conn->prepare('UPDATE todo SET done = 0 WHERE id = :todo_id');
+
+        $todo_id = $this->getTodoId();
+
+        $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT);
+        $updateResult = $stmt->execute();
+    }
 }
