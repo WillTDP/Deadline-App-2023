@@ -55,10 +55,10 @@ class Comment {
         return $result;
     }
 
-    public static function getCommentsForTask($task_id){
+    public static function getCommentsForTask($todo_id){
         $conn = Db::connect();
-        $stmt = $conn->prepare('SELECT * FROM comments WHERE todo_id = :task_id');
-        $stmt->bindValue(':task_id', $task_id);
+        $stmt = $conn->prepare('SELECT * FROM comments WHERE todo_id = :todo_id');
+        $stmt->bindValue(':todo_id', $todo_id);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;

@@ -130,6 +130,13 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
                                 <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button>
                             </form>
                         </td>
+                        <td>
+                            <form class="done-form">
+                                <!-- Update the checkbox input -->
+                                <input class="BtnDone" type="checkbox" name="done" class="doneCheckbox" data-todo-id="<?php echo $task['id']; ?>"
+                                <?php echo $task['done'] ? 'checked' : ''; ?>> <!-- Add 'checked' attribute if task is done -->
+                            </form>
+                        </td>
                     </tr>
                     <tr class="comments-row" data-task-id="<?php echo $task['id']; ?>">
                         <td colspan="5">

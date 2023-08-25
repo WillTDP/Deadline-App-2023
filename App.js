@@ -1,11 +1,21 @@
 //load comments when the page is loaded
 document.addEventListener("DOMContentLoaded", async function() {
+    
+    // Load comments for each task
     const commentForms = document.querySelectorAll(".comment-form");
 
     commentForms.forEach(form => {
         const todo_id = form.querySelector(".btnAddComment").dataset.todoId;
         loadComments(todo_id);
     });
+
+    // load done tasks
+    const doneForms = document.querySelectorAll(".done-form");
+
+    doneForms.forEach(form => {
+        const todo_id = form.querySelector(".btnDone").dataset.todoId;
+        loadDoneStatus(todo_id); // Load done status for each task
+        });
 });
 
 // Add event listener to the comment form submit button
@@ -29,6 +39,7 @@ document.querySelectorAll(".btnAddComment").forEach(button => {
           console.log(response);
           const result = await response.json();
           console.log("Success:", result);
+          loadComments(todo_id);
         } catch (error) {
           console.error("Error:", error);
         }
@@ -65,3 +76,51 @@ async function loadComments(taskId) {
         console.error("Error:", error);
     }
 }
+
+// Handle marking tasks as done
+document.querySelectorAll(".done-form").forEach(form => {
+    form.addEventListener("change", async function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        const checkbox = event.target;
+        const todo_id = checkbox.dataset.todoId;
+
+        // Create a FormData object to send data via POST
+        const formData = new FormData();
+        formData.append("todo_id", todo_id);
+
+        try {
+            const response = await fetch("AJAX/MarkTask.php", {
+                method: "POST",
+                body: formData
+            });
+            const result = await response.json();
+            console.log("Success:", result);
+
+            // You can update the UI here based on the result
+            // For example, you can change the style of the task to indicate it's done
+        } catch (error) {
+            console.error("Error:", error);
+            console.log("Response Text:", await response.text());
+        }
+    });
+});
+
+// Function to load done status for a specific task
+async function loadDoneStatus(taskId) {
+    const checkbox = document.querySelector(`.BtnDone[data-todo-id="${taskId}"]`);
+    
+    try {
+        const response = await fetch(`AJAX/GetDoneStatus.php?task_id=${taskId}`);
+        const status = await response.json();
+        console.log(status);    
+        
+        if (status.done === 1) {
+            checkbox.checked = true;
+        } else {
+            checkbox.checked = false;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
