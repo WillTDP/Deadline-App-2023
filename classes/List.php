@@ -1,4 +1,7 @@
 <?php
+include_once(__DIR__ . "/Db.php");
+include_once(__DIR__ . "/ToDo.php");
+
 class Lists {   
     //create list in db
     public static function createList($name) {
@@ -74,5 +77,34 @@ class Lists {
         //return array of todos
         $lists = $query->fetchAll(PDO::FETCH_ASSOC);
         return $lists;
+    }
+
+    //remove list by id
+    public static function removeListById($id) {
+        //db connection
+        $conn = Db::connect();
+        
+        // Fetch all tasks with the given list ID
+        $tasks = ToDo::getTasksByListId($id);
+
+        // Loop through tasks and remove them
+        foreach ($tasks as $task) {
+            ToDo::removeTaskById($task['id']);
+        }
+
+        //insert query into db
+        $query = $conn->prepare('DELETE FROM lists WHERE id = :id');
+
+        //bind values to query
+        $query->bindValue(':id', $id);
+
+        //execute query
+        $query->execute();
+
+        //return array of tasks
+        $list = $query->fetch(PDO::FETCH_ASSOC);
+
+        //return todos
+        return $list;
     }
 }

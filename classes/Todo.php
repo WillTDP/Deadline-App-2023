@@ -149,5 +149,27 @@ class ToDo{
 
     }
 
+    //get tasks by list id
+    public static function getTasksByListId($list_id)
+    {
+        //db connection
+        $conn = Db::connect();
+        //insert query into db
+        $query = $conn->prepare('SELECT * FROM todo WHERE list_id = :list_id');
+        
+        //bind values to query
+        $query->bindValue(':list_id', $list_id);
+
+        //execute query
+        $query->execute();
+
+        //return array of tasks
+        $todos = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        //return todos
+        return $todos;
+
+    }
+
 }
 

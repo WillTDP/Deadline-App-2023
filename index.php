@@ -37,6 +37,11 @@ if (isset($_POST['delete_task'])) {
     $removed = ToDo::removeTaskById($task_id);
     // You can do further processing or display a message here
 }
+if (isset($_POST['delete_list'])) {
+    $list_id = $_POST['list_id'];
+    $removed = Lists::removeListById($list_id);
+    // You can do further processing or display a message here
+}
 
 //$allTasks = ToDo::getTasks(); // Fetch all tasks
 $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
@@ -104,6 +109,11 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
 <div>
     <?php foreach ($lists as $list): ?>
         <h3>List: <?php echo htmlspecialchars($list['name']); ?></h3>
+        <!--remove list-->
+        <form action="" method="post">
+            <input type="hidden" name="list_id" value="<?php echo $list['id']; ?>">
+            <button type="submit" name="delete_list">X</button>
+        </form>
         <table>
             <tr>
                 <th>Name</th>
