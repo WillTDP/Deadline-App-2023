@@ -63,6 +63,8 @@ class Done {
 
         $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT);
         $updateResult = $stmt->execute();
+
+        return $updateResult;
     }
 
     //remove todo from done table
@@ -87,5 +89,7 @@ class Done {
 
         $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT);
         $updateResult = $stmt->execute();
+
+        return $updateResult;
     }
 }

@@ -29,3 +29,4 @@
 [0825/144557.677:ERROR:settings.cc(325)] Settings version is not 1
 [0825/144557.679:ERROR:crash_report_database_win.cc(428)] unexpected header
 [0825/150806.474:ERROR:crash_report_database_win.cc(428)] unexpected header
+[0825/155127.262:ERROR:crash_report_database_win.cc(428)] unexpected header

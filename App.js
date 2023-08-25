@@ -129,7 +129,7 @@ async function loadDoneStatus(taskId) {
     try {
         const response = await fetch(`AJAX/GetDoneStatus.php?task_id=${taskId}`);
         const status = await response.json();
-        console.log(status);    
+        //console.log(status);    
         
         if (status.done === 1) {
             checkbox.checked = true;

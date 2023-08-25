@@ -2,20 +2,61 @@
 include_once(__DIR__ . "/Db.php");
 include_once(__DIR__ . "/ToDo.php");
 
-class Lists {   
+
+class Lists {
+    private $name;
+
+    
+    /**
+     * Get the value of name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the value of name
+     */
+    public function setName($name): self
+    {
+        //check if name is empty
+        if(empty($name)){
+            throw new Exception("List Name cannot be empty");
+        } else {
+            $this->name = $name;
+
+            return $this;
+        }
+    }
+    
+
     //create list in db
     public static function createList($name) {
-        //db connection
-        $conn = Db::connect();
+        try {
+            // Call the setter to validate the name
+            $list = new self(); // Create an instance of Lists
+            $list->setName($name);
 
-        //insert query into db
-        $query = $conn->prepare('INSERT INTO lists (name) VALUES (:name)');
+            // If validation passes, proceed to insert into the database                    
+            //db connection
+            $conn = Db::connect();
 
-        //bind values to query
-        $query->bindValue(':name', $name);
+            //insert query into db
+            $query = $conn->prepare('INSERT INTO lists (name) VALUES (:name)');
 
-        //execute query and return result
-        return $query->execute();
+            //bind values to query
+            $query->bindValue(':name', $name);
+
+            //execute query and return result
+            return $query->execute();
+
+            return true; // Or some success response
+        } catch (Exception $e) {
+            // Catch the exception and provide a user-friendly error message
+            echo $e->getMessage();            
+        }
+
     }
 
     //assign todo to list
@@ -90,6 +131,7 @@ class Lists {
         // Loop through tasks and remove them
         foreach ($tasks as $task) {
             ToDo::removeTaskById($task['id']);
+            
         }
 
         //insert query into db

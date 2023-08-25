@@ -18,9 +18,14 @@ class ToDo{
      */
     public function setName($name): self
     {
-        $this->name = $name;
+        //check if name is empty
+        if(empty($name)){
+            throw new Exception("Name cannot be empty");
+        } else {
+            $this->name = $name;
 
-        return $this;
+            return $this;
+        }
     }
 
     /**
@@ -36,9 +41,14 @@ class ToDo{
      */
     public function setDescription($description): self
     {
-        $this->description = $description;
+        //check if task is empty
+        if(empty($description)){
+            throw new Exception("Task cannot be empty");
+        } else {
+            $this->description = $description;
 
-        return $this;
+            return $this;
+        }
     }
 
     /**
@@ -54,9 +64,14 @@ class ToDo{
      */
     public function setDeadline($deadline): self
     {
-        $this->deadline = $deadline;
+        //check if deadline is empty
+        if(empty($deadline)){
+            throw new Exception("Deadline cannot be empty");
+        } else {
+            $this->deadline = $deadline;
 
-        return $this;
+            return $this;
+        }
     }
 
     public function save()
@@ -164,10 +179,10 @@ class ToDo{
         $query->execute();
 
         //return array of tasks
-        $todos = $query->fetchAll(PDO::FETCH_ASSOC);
+        $todo = $query->fetchAll(PDO::FETCH_ASSOC);
 
         //return todos
-        return $todos;
+        return $todo;
 
     }
 

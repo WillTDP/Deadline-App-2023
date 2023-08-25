@@ -63,4 +63,19 @@ class Comment {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    //remove comment
+    public static function removeComment($comment_id){
+        $conn = Db::connect();
+        $stmt = $conn->prepare('DELETE FROM comments WHERE id = :comment_id');
+        $stmt->bindValue(':comment_id', $comment_id);
+        $stmt->execute();
+    }
+    //remove comment by todo_id
+    public static function removeCommentByTodoId($todo_id){
+        $conn = Db::connect();
+        $stmt = $conn->prepare('DELETE FROM comments WHERE todo_id = :todo_id');
+        $stmt->bindValue(':todo_id', $todo_id);
+        $stmt->execute();
+    }
 }
