@@ -1,29 +1,16 @@
 <?php
 session_start();
 include_once 'Classes/Db.php';
-
-function canLogin($username, $password) {
-    $conn = Db::connect();
-    $query = $conn->prepare('SELECT * FROM users WHERE email = :email');
-    $query->bindValue(':email', $username);
-    $query->execute();
-    $user = $query->fetch();
-    $hash = $user['password'];
-    if (password_verify($password, $hash)) {
-        return true;
-    } else {
-        return false;
-    }
-}
+include_once 'Classes/User.php';
 
 if (!empty($_POST)) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    if (canLogin($username, $password)) {
-        session_start();
+    if (User::canLogin($username, $password)) {
         $_SESSION['username'] = $username;
         header('Location: index.php');
+        exit;
     } else {
         $error = 'Wrong username or password';
     }
@@ -54,6 +41,7 @@ if (!empty($_POST)) {
             </div>
             <input type="submit" value="Login" id="login">
         </form>
+        <a href="signup.php">Sign Up</a>
     </div>
 </body>
 </html>

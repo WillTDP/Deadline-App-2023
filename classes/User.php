@@ -41,17 +41,32 @@ Class User {
         return $this;
     }
 
-    public function save(){
+    public static function canLogin($username, $password) {
         $conn = Db::connect();
-        $stmt = $conn->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
+        $query = $conn->prepare('SELECT * FROM users WHERE email = :email');
+        $query->bindValue(':email', $username);
+        $query->execute();
+        $user = $query->fetch();
 
-        $email = $this->getEmail();
-        $password = $this->getPassword();
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                return true;
+            }
+        }
 
-        $stmt->bindValue(':email', $email);
-        $stmt->bindValue(':password', $password);
+        return false;
+    }
 
-        $result = $stmt->execute();
+    public static function signUp($email, $password) {
+        $conn = Db::connect();
+        $query = $conn->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
+        $query->bindValue(':email', $email);
+        $query->bindValue(':password', password_hash($password, PASSWORD_DEFAULT));
+        $result = $query->execute();
+
         return $result;
     }
+
+
+    
 }

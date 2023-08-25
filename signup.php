@@ -1,18 +1,20 @@
 <?php
-    include_once(__DIR__ . "/classes/Db.php");
+include_once(__DIR__ . "/Classes/Db.php");
+include_once(__DIR__ . "/Classes/User.php");
 
-    if(!empty($_POST)){
-        $email = $_POST['username'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+if (!empty($_POST)) {
+    $email = $_POST['username'];
+    $password = $_POST['password'];
 
-        $conn = Db::connect();
-        $query = $conn->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
-        $query->bindValue(':email', $email);
-        $query->bindValue(':password', $password);
-        $query->execute();
+    $result = User::signUp($email, $password);
 
+    if ($result) {
+        header('Location: login.php');
+        exit;
+    } else {
+        $error = 'Signup failed';
     }
-
+}
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,6 +39,7 @@
             </div>
             <input type="submit" value="sign up" id="login">
         </form>
+        <a href="login.php">Login</a>
     </div>
 </body>
 </html>
