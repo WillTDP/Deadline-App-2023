@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . "/Db.php");
+include_once(__DIR__ . "/Comments.php");
 class ToDo{
     private $name;
     private $description;
@@ -147,6 +148,14 @@ class ToDo{
     {
         //db connection
         $conn = Db::connect();
+        
+        //if the todo has comments, delete them first
+        $comments = Comment::getCommentsForTask($id);
+
+        foreach ($comments as $comment) {
+            Comment::removeCommentByTodoId($comment['todo_id']);
+        } 
+
         //insert query into db
         $query = $conn->prepare('DELETE FROM todo WHERE id = :id');
         
@@ -155,13 +164,6 @@ class ToDo{
 
         //execute query
         $query->execute();
-
-        //return array of tasks
-        $todo = $query->fetch(PDO::FETCH_ASSOC);
-
-        //return todos
-        return $todo;
-
     }
 
     //get tasks by list id
