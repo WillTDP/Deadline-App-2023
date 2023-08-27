@@ -10,9 +10,16 @@ if (!empty($_POST)) {
         try {
             // Form was submitted
             $todo = new ToDo();
-            $todo->setName($_POST['name']);
-            $todo->setDescription($_POST['description']);
-            $todo->setDeadline($_POST['deadline']);
+            if (isset($_POST['name'])) {
+                $todo->setName($_POST['name']);
+            }
+            if (isset($_POST['description'])) {
+                $todo->setDescription($_POST['description']);
+            }
+            if (isset($_POST['deadline'])) {
+                $todo->setDeadline($_POST['deadline']);
+            }
+            
 
             $newTodoId = $todo->save(); // Get the ID of the newly inserted todo item
 
@@ -98,16 +105,13 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
         <?php if (isset($error)): ?>
             <div class="alert"><?php echo $error; ?></div>
         <?php endif; ?>
-        <?php if (isset($success)): ?>
-            <div class="success"><?php echo $success; ?></div>
-        <?php endif; ?>
         <a href="logout.php">Log Out</a>
     </div>
     <!-- If a todo is deleted, show a message here -->
     <?php
                     if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         // Check if the form was submitted and the deletion was attempted
-                        $idToDelete = $_POST["todo_id"]; // Assuming you have a form field named "todo_id"
+                        $idToDelete = $_POST["task_id"]; // Assuming you have a form field named "task_id"
                         $deletionMessage = Todo::removeTaskById($idToDelete);
                         
                         echo "<p>{$deletionMessage}</p>";
@@ -130,7 +134,6 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
                     <th>Remove</th>
                 </tr>
                 <?php $todosForList = Lists::getTodosForList($list['id'], 'ascending', 'deadline'); ?> <!-- Get todos for the current list based on the ids from the list, it's also sorted by date -->
-                <div id="ToDos">
                     <?php foreach ($todosForList as $task): ?> <!-- Loop through the todos for the current list -->
                         <tr>
                             <td><?php echo htmlspecialchars($task['name']); ?></td>
@@ -164,7 +167,6 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                </div>
             </table>
         <?php endforeach; ?>
     </div>
