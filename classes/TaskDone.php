@@ -92,4 +92,14 @@ class Done {
 
         return $updateResult;
     }
+
+    //get done todo by id
+    public static function getDoneTodoById($todo_id){
+        $conn = Db::connect();
+        $stmt = $conn->prepare('SELECT * FROM done WHERE todo_id = :todo_id');
+        $stmt->bindValue(':todo_id', $todo_id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
 }

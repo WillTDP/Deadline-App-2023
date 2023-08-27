@@ -1,6 +1,8 @@
 <?php
 include_once(__DIR__ . "/Db.php");
 include_once(__DIR__ . "/Comments.php");
+include_once(__DIR__ . "/TaskDone.php");
+
 class ToDo{
     private $name;
     private $description;
@@ -154,7 +156,15 @@ class ToDo{
 
         foreach ($comments as $comment) {
             Comment::removeCommentByTodoId($comment['todo_id']);
-        } 
+        }
+
+        // remove done todo
+        $doneTodo = Done::getDoneTodoById($id);
+        if ($doneTodo) {
+            $doneTodoObject = new Done();
+            $doneTodoObject->setTodoId($id);
+            $doneTodoObject->removeTodo();
+        }
 
         //insert query into db
         $query = $conn->prepare('DELETE FROM todo WHERE id = :id');
