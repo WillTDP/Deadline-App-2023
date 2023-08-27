@@ -45,22 +45,22 @@ class Comment {
         $conn = Db::connect();
         $stmt = $conn->prepare('INSERT INTO comments (text, todo_id) VALUES (:text, :todo_id)');
 
-        $text = $this->getText();
-        $todo_id = $this->getTodoId();
+        $text = $this->getText(); // Use the getter method to retrieve the value 
+        $todo_id = $this->getTodoId(); // Use the getter method to retrieve the value
 
-        $stmt->bindValue(':text', $text);
-        $stmt->bindValue(':todo_id', $todo_id);
+        $stmt->bindValue(':text', $text); // Use the local variable $text 
+        $stmt->bindValue(':todo_id', $todo_id); // Use the local variable $todo_id
 
-        $result = $stmt->execute();
+        $result = $stmt->execute(); // Execute the prepared statement
         return $result;
     }
 
     public static function getCommentsForTask($todo_id){
         $conn = Db::connect();
         $stmt = $conn->prepare('SELECT * FROM comments WHERE todo_id = :todo_id');
-        $stmt->bindValue(':todo_id', $todo_id);
+        $stmt->bindValue(':todo_id', $todo_id); // Use the local variable $todo_id
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all the results into an array
         return $result;
     }
 
@@ -68,14 +68,14 @@ class Comment {
     public static function removeComment($comment_id){
         $conn = Db::connect();
         $stmt = $conn->prepare('DELETE FROM comments WHERE id = :comment_id');
-        $stmt->bindValue(':comment_id', $comment_id);
-        $stmt->execute();
+        $stmt->bindValue(':comment_id', $comment_id);  // Use the local variable $comment_id
+        $stmt->execute(); 
     }
     //remove comment by todo_id
     public static function removeCommentByTodoId($todo_id){
         $conn = Db::connect();
         $stmt = $conn->prepare('DELETE FROM comments WHERE todo_id = :todo_id');
-        $stmt->bindValue(':todo_id', $todo_id);
+        $stmt->bindValue(':todo_id', $todo_id); // Use the local variable $todo_id
         $stmt->execute();
     }
 }

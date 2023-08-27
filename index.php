@@ -35,12 +35,10 @@ if (isset($_SESSION['username'])) {
 if (isset($_POST['delete_task'])) {
     $task_id = $_POST['task_id'];
     $removed = ToDo::removeTaskById($task_id);
-    // You can do further processing or display a message here
 }
 if (isset($_POST['delete_list'])) {
     $list_id = $_POST['list_id'];
     $removed = Lists::removeListById($list_id);
-    // You can do further processing or display a message here
 }
 
 //$allTasks = ToDo::getTasks(); // Fetch all tasks
@@ -131,9 +129,9 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
                     <th>Deadline</th>
                     <th>Remove</th>
                 </tr>
-                <?php $todosForList = Lists::getTodosForList($list['id'], 'ascending', 'deadline'); ?>
+                <?php $todosForList = Lists::getTodosForList($list['id'], 'ascending', 'deadline'); ?> <!-- Get todos for the current list based on the ids from the list, it's also sorted by date -->
                 <div id="ToDos">
-                    <?php foreach ($todosForList as $task): ?>
+                    <?php foreach ($todosForList as $task): ?> <!-- Loop through the todos for the current list -->
                         <tr>
                             <td><?php echo htmlspecialchars($task['name']); ?></td>
                             <td><?php echo htmlspecialchars($task['description']); ?></td>
@@ -147,7 +145,7 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
                             <td>
                                 <form class="comment-form">
                                     <input type="text" name="comment" class="commentText" placeholder="Add a comment">
-                                    <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button>
+                                    <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button> 
                                 </form>
                             </td>
                             <td>

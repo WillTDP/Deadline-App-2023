@@ -59,10 +59,10 @@ class Done {
         $conn = Db::connect();
         $stmt = $conn->prepare('UPDATE todo SET done = 1 WHERE id = :todo_id');
 
-        $todo_id = $this->getTodoId();
+        $todo_id = $this->getTodoId(); // Use the getter method to retrieve the value
 
-        $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT);
-        $updateResult = $stmt->execute();
+        $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT); // Use the local variable $todo_id
+        $updateResult = $stmt->execute(); // Execute the query and store the result
 
         return $updateResult;
     }
@@ -83,11 +83,11 @@ class Done {
     //remove done todo from todo table
     public function removeDoneTodo(){
         $conn = Db::connect();
-        $stmt = $conn->prepare('UPDATE todo SET done = 0 WHERE id = :todo_id');
+        $stmt = $conn->prepare('UPDATE todo SET done = 0 WHERE id = :todo_id'); 
 
-        $todo_id = $this->getTodoId();
-
-        $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT);
+        $todo_id = $this->getTodoId(); // Use the getter method to retrieve the value
+ 
+        $stmt->bindValue(':todo_id', $todo_id, PDO::PARAM_INT); // Use the local variable $todo_id 
         $updateResult = $stmt->execute();
 
         return $updateResult;
@@ -96,10 +96,10 @@ class Done {
     //get done todo by id
     public static function getDoneTodoById($todo_id){
         $conn = Db::connect();
-        $stmt = $conn->prepare('SELECT * FROM done WHERE todo_id = :todo_id');
-        $stmt->bindValue(':todo_id', $todo_id);
+        $stmt = $conn->prepare('SELECT * FROM done WHERE todo_id = :todo_id'); 
+        $stmt->bindValue(':todo_id', $todo_id); // Use the local variable $todo_id
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); 
         return $result;
     }
 }

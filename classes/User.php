@@ -18,9 +18,14 @@ Class User {
      */
     public function setEmail($email): self
     {
-        $this->email = $email;
+        //check if email is empty
+        if(empty($email)){
+            throw new Exception("Email cannot be empty");
+        } else {
+            $this->email = $email;
 
-        return $this;
+            return $this;
+        }
     }
 
     /**
@@ -36,9 +41,14 @@ Class User {
      */
     public function setPassword($password): self
     {
-        $this->password = $password;
+        //check if password is empty
+        if(empty($password)){
+            throw new Exception("Password cannot be empty");
+        } else {
+            $this->password = $password;
 
-        return $this;
+            return $this;
+        }
     }
 
     public static function canLogin($username, $password) {

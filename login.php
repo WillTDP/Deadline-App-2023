@@ -4,12 +4,12 @@ include_once 'Classes/Db.php';
 include_once 'Classes/User.php';
 
 if (!empty($_POST)) {
-    $username = $_POST['username'];
+    $username = $_POST['username']; 
     $password = $_POST['password'];
 
-    if (User::canLogin($username, $password)) {
-        $_SESSION['username'] = $username;
-        header('Location: index.php');
+    if (User::canLogin($username, $password)) { //this calls the canLogin function from the User class 
+        $_SESSION['username'] = $username; //this sets the session username to the username that was entered
+        header('Location: index.php'); //this redirects to the index page
         exit;
     } else {
         $error = 'Wrong username or password';
