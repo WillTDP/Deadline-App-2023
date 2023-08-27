@@ -148,32 +148,44 @@ class ToDo{
     //remove task by id
     public static function removeTaskById($id)
     {
-        //db connection
-        $conn = Db::connect();
+        try { 
+            //db connection
+            $conn = Db::connect();
+                    
+            //if the todo has comments, delete them first
+            $comments = Comment::getCommentsForTask($id);
+
+            foreach ($comments as $comment) {
+                Comment::removeCommentByTodoId($comment['todo_id']);
+            }
+
+            // remove done todo
+            $doneTodo = Done::getDoneTodoById($id);
+            if ($doneTodo) {
+                $doneTodoObject = new Done();
+                $doneTodoObject->setTodoId($id);
+                $doneTodoObject->removeTodo();
+            }
+
+            //insert query into db
+            $query = $conn->prepare('DELETE FROM todo WHERE id = :id');
+            
+            //bind values to query
+            $query->bindValue(':id', $id);
+
+            // execute query
+            $queryResult = $query->execute();
+            
+            if ($queryResult) {
+                return "Todo deleted successfully.";
+            } else {
+                return "Failed to delete todo.";
+            }
         
-        //if the todo has comments, delete them first
-        $comments = Comment::getCommentsForTask($id);
-
-        foreach ($comments as $comment) {
-            Comment::removeCommentByTodoId($comment['todo_id']);
+        } catch (Throwable $t) {
+            return false;
+            var_dump($t->getMessage());
         }
-
-        // remove done todo
-        $doneTodo = Done::getDoneTodoById($id);
-        if ($doneTodo) {
-            $doneTodoObject = new Done();
-            $doneTodoObject->setTodoId($id);
-            $doneTodoObject->removeTodo();
-        }
-
-        //insert query into db
-        $query = $conn->prepare('DELETE FROM todo WHERE id = :id');
-        
-        //bind values to query
-        $query->bindValue(':id', $id);
-
-        //execute query
-        $query->execute();
     }
 
     //get tasks by list id

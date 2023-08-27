@@ -105,61 +105,71 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
         <?php endif; ?>
         <a href="logout.php">Log Out</a>
     </div>
-<!-- Display lists and associated todos -->
-<div>
-    <?php foreach ($lists as $list): ?>
-        <h3>List: <?php echo htmlspecialchars($list['name']); ?></h3>
-        <!--remove list-->
-        <form action="" method="post">
-            <input type="hidden" name="list_id" value="<?php echo $list['id']; ?>">
-            <button type="submit" name="delete_list">X</button>
-        </form>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Deadline</th>
-                <th>Remove</th>
-            </tr>
-            <?php $todosForList = Lists::getTodosForList($list['id'], 'ascending', 'deadline'); ?>
-            <div id="ToDos">
-                <?php foreach ($todosForList as $task): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($task['name']); ?></td>
-                        <td><?php echo htmlspecialchars($task['description']); ?></td>
-                        <td><?php echo htmlspecialchars($task['deadline']); ?></td>
-                        <td>
-                            <form action="" method="post">
-                                <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
-                                <button type="submit" name="delete_task">X</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form class="comment-form">
-                                <input type="text" name="comment" class="commentText" placeholder="Add a comment">
-                                <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form class="done-form">
-                                <!-- Update the checkbox input -->
-                                <input class="BtnDone" type="checkbox" name="done" class="doneCheckbox" data-todo-id="<?php echo $task['id']; ?>"
-                                <?php echo $task['done'] ? 'checked' : ''; ?>> <!-- Add 'checked' attribute if task is done -->
-                            </form>
-                        </td>
-                    </tr>
-                    <tr class="comments-row" data-task-id="<?php echo $task['id']; ?>">
-                        <td colspan="5">
-                            <ul class="comments-list">
-                                <!-- Comments will be added dynamically here -->
-                            </ul>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </div>
-        </table>
-    <?php endforeach; ?>
-</div>
+    <!-- If a todo is deleted, show a message here -->
+    <?php
+                    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                        // Check if the form was submitted and the deletion was attempted
+                        $idToDelete = $_POST["todo_id"]; // Assuming you have a form field named "todo_id"
+                        $deletionMessage = Todo::removeTaskById($idToDelete);
+                        
+                        echo "<p>{$deletionMessage}</p>";
+                    }
+        ?>
+    <!-- Display lists and associated todos -->
+    <div>
+        <?php foreach ($lists as $list): ?>
+            <h3>List: <?php echo htmlspecialchars($list['name']); ?></h3>
+            <!--remove list-->
+            <form action="" method="post">
+                <input type="hidden" name="list_id" value="<?php echo $list['id']; ?>">
+                <button type="submit" name="delete_list">X</button>
+            </form>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Deadline</th>
+                    <th>Remove</th>
+                </tr>
+                <?php $todosForList = Lists::getTodosForList($list['id'], 'ascending', 'deadline'); ?>
+                <div id="ToDos">
+                    <?php foreach ($todosForList as $task): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($task['name']); ?></td>
+                            <td><?php echo htmlspecialchars($task['description']); ?></td>
+                            <td><?php echo htmlspecialchars($task['deadline']); ?></td>
+                            <td>
+                                <form action="" method="post">
+                                    <input type="hidden" name="task_id" value="<?php echo $task['id']; ?>">
+                                    <button type="submit" name="delete_task">X</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form class="comment-form">
+                                    <input type="text" name="comment" class="commentText" placeholder="Add a comment">
+                                    <button class="btnAddComment" type="submit" data-todo-id="<?php echo $task['id']; ?>">Add</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form class="done-form">
+                                    <!-- Update the checkbox input -->
+                                    <input class="BtnDone" type="checkbox" name="done" class="doneCheckbox" data-todo-id="<?php echo $task['id']; ?>"
+                                    <?php echo $task['done'] ? 'checked' : ''; ?>> <!-- Add 'checked' attribute if task is done -->
+                                </form>
+                            </td>
+                        </tr>
+                        <tr class="comments-row" data-task-id="<?php echo $task['id']; ?>">
+                            <td colspan="5">
+                                <ul class="comments-list">
+                                    <!-- Comments will be added dynamically here -->
+                                </ul>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </div>
+            </table>
+        <?php endforeach; ?>
+    </div>
   
 <script src="App.js"></script>
 </body>
