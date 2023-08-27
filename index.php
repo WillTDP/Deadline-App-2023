@@ -109,14 +109,12 @@ $lists = Lists::getAllLists(); // Implement this method to retrieve all lists
     </div>
     <!-- If a todo is deleted, show a message here -->
     <?php
-                    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-                        // Check if the form was submitted and the deletion was attempted
-                        $idToDelete = $_POST["task_id"]; // Assuming you have a form field named "task_id"
-                        $deletionMessage = Todo::removeTaskById($idToDelete);
-                        
-                        echo "<p>{$deletionMessage}</p>";
-                    }
-        ?>
+        if (isset($_POST['delete_task'])) {
+            $task_id = $_POST['task_id'];
+            $deletionMessage = Todo::removeTaskById($task_id);
+            echo "<p>{$deletionMessage}</p>";
+        }
+    ?>
     <!-- Display lists and associated todos -->
     <div>
         <?php foreach ($lists as $list): ?>
